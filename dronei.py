@@ -2,6 +2,8 @@ import queue
 import random
 import numpy as np
 import math
+#
+#Data
 number_customer=20
 number_truck=3
 number_drone=3
@@ -30,6 +32,8 @@ for i in range(1,len(customer)):
     customer[i]=cus(coordinates[i],time_release[i],1)
 truck_path_array=[1,3,5,7,8,0,2,4,10,11,13,15,0,9,18,20,19,6,12,17,16,14]
 x=[0.4,0.5,0.8,0.75,0.15,0.9,0.3,0.25,0.65,0.7,0.13,0.45,0.1,0.2,0.5,0.11,0.25,0.36,0.19,0.78,0.89,0.9]
+#
+#Function
 def distance(a,b):
     return math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2)
 def change_array(array1,array2,M,N):
@@ -76,7 +80,6 @@ def change_array(array1,array2,M,N):
                 array4[i]=array1[array3[i]+a[j]]
             elif array3[i]==0:
                 array4[i]=0
-
     for i in range(a[N-1]+1,M+N-1):
         if array3[i]==0:
             array4[i]=0
@@ -92,7 +95,6 @@ def change_array(array1,array2,M,N):
             if arraya[0][0]==-1:
                 arraya[0].remove(-1)
             arraya[0].append(array1[i])
-
     for j in range(1,N-1):
         for i in range(a[j]+1,a[j+1]):
             if array4[i]==0:
@@ -101,7 +103,6 @@ def change_array(array1,array2,M,N):
                         if arraya[k][0]==-1:
                             arraya[k].remove(-1)
                         arraya[k].append(array1[i])
-
     for i in range(a[N-1]+1,M+N):
         if array4[i]==0:
             for k in range(a[N-1],M+N):
@@ -109,8 +110,6 @@ def change_array(array1,array2,M,N):
                     if arraya[k][0]==-1:
                         arraya[k].remove(-1)
                     arraya[k].append(array1[i])
-
-
     for i in range(1,M+N):
         for j in range(0,M+N):
             if array4[j]==i:
@@ -197,7 +196,7 @@ for i in range(0,len(truck_time)):
         package_queue[i][ite[i]][0]=truck_time[i]-(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_drone
     else:
         package_queue[i][ite[i]][0]=max(max_outarray_release_date(decryption[1][a[i]+ite[i]+1]),truck_time[i]-(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_drone)
-
+#
 # trucks and drones move
 for z in range(0,number_customer+1):
     compare=[]
@@ -234,7 +233,7 @@ for z in range(0,number_customer+1):
             package_queue[h][ite[h]][0]=truck_time[h]-(distance(depot,customer[package_queue[h][ite[h]][1]].coordinates))/speed_drone
         else:
             package_queue[h][ite[h]][0]=max(max_outarray_release_date(decryption[1][a[h]+ite[h]+1]),truck_time[h]-(distance(customer[package_queue[h][ite[h]-1][1]].coordinates,customer[package_queue[h][ite[h]][1]].coordinates))/speed_drone)
-
+#
 #trucks back to depot
 last_point_package_queue=[]
 for i in range(0,len(a)-1):
