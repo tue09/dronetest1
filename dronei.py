@@ -225,6 +225,7 @@ for z in range(0,number_customer+1):
             element_put_in_drone_queue=[0]*len(p)
             for i in range(0,len(p)):
                 timedr=drone_queue.get()
+                r=i%3
                 drone_queue.put(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
                 element_put_in_drone_queue[i]=(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
 
@@ -242,7 +243,7 @@ for z in range(0,number_customer+1):
 #trucks back to depot
 last_point_package_queue=[]
 for i in range(0,len(a)-1):
-    last_point_package_queue.append(a[i+1]-1)
+    last_point_package_queue.append(truck_path_array[a[i+1]-2])
 last_point_package_queue.append(truck_path_array[len(truck_path_array)-1])
 for i in range(0,number_truck):
     truck_time[i]=truck_time[i]+distance(customer[last_point_package_queue[i]].coordinates,depot)/speed_truck
