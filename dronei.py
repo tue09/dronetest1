@@ -10,7 +10,6 @@ number_drone=3
 speed_truck=30
 speed_drone=45
 capicity_drone=3
-depot=[40,50]
 file_object=open('C101_0.5.dat')
 data=file_object.readlines()
 coordinates=[0]*(number_customer+1)
@@ -26,8 +25,9 @@ class cus:
         self.coordinates = coordinates
         self.release_date=release_date
         self.weight=weight
+depot=coordinates[0]
 customer=[0]*(number_customer+1)
-customer[0]=cus([40,50],0,0)
+customer[0]=cus(coordinates[0],0,0)
 for i in range(1,len(customer)):
     customer[i]=cus(coordinates[i],time_release[i],1)
 truck_path_array=[1,3,5,7,8,0,2,4,10,11,13,15,0,9,18,20,19,6,12,17,16,14]
@@ -189,8 +189,10 @@ truck_time=[0]*number_truck
 for i in range(0,len(truck_time)):
     if decryption[1][a[i]+ite[i]][0]==-1:
         truck_time[i]=truck_time[i]+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
+        print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
     else:
         truck_time[i]=truck_time[i]+max_outarray_release_date(decryption[1][a[i]+ite[i]])+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
+        print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
 for i in range(0,len(truck_time)):
     if decryption[1][a[i]+ite[i]+1][0]==-1:
         package_queue[i][ite[i]][0]=truck_time[i]-(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_drone
@@ -223,12 +225,16 @@ for z in range(0,number_customer+1):
             element_put_in_drone_queue=[0]*len(p)
             for i in range(0,len(p)):
                 timedr=drone_queue.get()
+                r=i%3
                 drone_queue.put(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
                 element_put_in_drone_queue[i]=(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
 
-        if decryption[1][a[h]+ite[h]][0]==-1: truck_time[h]=truck_time[h]+(distance(customer[package_queue[h][ite[h]][1]].coordinates,customer[package_queue[h][ite[h]-1][1]].coordinates))/speed_truck
+        if decryption[1][a[h]+ite[h]][0]==-1:
+            truck_time[h]=truck_time[h]+(distance(customer[package_queue[h][ite[h]][1]].coordinates,customer[package_queue[h][ite[h]-1][1]].coordinates))/speed_truck
+            print("Truck",h,":",truck_path_array[a[h]+ite[h]-1],"to",truck_path_array[a[h]+ite[h]])
         else:
             truck_time[h]=element_put_in_drone_queue[len(p)-1]-(distance(customer[decryption[0][a[h]+ite[h]-1]].coordinates,customer[decryption[0][a[h]+ite[h]]].coordinates)/speed_drone)+(distance(customer[package_queue[h][ite[h]-1][1]].coordinates,customer[package_queue[h][ite[h]][1]].coordinates))/speed_truck
+            print("Truck",h,":",truck_path_array[a[h]+ite[h]-1],"to",truck_path_array[a[h]+ite[h]])
         if decryption[1][a[h]+ite[h]+1][0]==-1:
             package_queue[h][ite[h]][0]=truck_time[h]-(distance(depot,customer[package_queue[h][ite[h]][1]].coordinates))/speed_drone
         else:
@@ -241,5 +247,6 @@ for i in range(0,len(a)-1):
 last_point_package_queue.append(truck_path_array[len(truck_path_array)-1])
 for i in range(0,number_truck):
     truck_time[i]=truck_time[i]+distance(customer[last_point_package_queue[i]].coordinates,depot)/speed_truck
+    print("Truck %i :"%i,last_point_package_queue[i],"to 0")
 Time=max(truck_time)
 print("Time is: ",Time)
