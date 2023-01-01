@@ -120,6 +120,7 @@ def change_array(array1,array2,M,N):
                         arraya[k].append(array1[j])
     arr=np.array((array1,arraya))
     return arr
+#M=number_customer, N=number_truck
 def max_outarray_release_date(array):
     b=[]
     for i in range(0,len(array)):
@@ -162,7 +163,6 @@ def sorted_package_by_weight(array,capicity):
         if len(x[i])==0:
             x.pop(i)
     return x
-#M=number_customer, N=number_truck
 decryption=change_array(truck_path_array,x,20,3)
 # a is an array satisfying decryption[a[i]]=0 for all i in range(0,len(a))
 a=[]
@@ -243,7 +243,3 @@ for i in range(0,number_truck):
     truck_time[i]=truck_time[i]+distance(customer[last_point_package_queue[i]].coordinates,depot)/speed_truck
 Time=max(truck_time)
 print("Time is: ",Time)
-
-
-
-
