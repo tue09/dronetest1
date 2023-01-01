@@ -187,12 +187,14 @@ truck_time=[0]*number_truck
 #
 # Trucks move from depot :
 for i in range(0,len(truck_time)):
-    if decryption[1][a[i]+ite[i]][0]==-1:
-        truck_time[i]=truck_time[i]+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
-        print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
+    if package_queue[i][ite[i]][1]==999:truck_time[i]=0
     else:
-        truck_time[i]=truck_time[i]+max_outarray_release_date(decryption[1][a[i]+ite[i]])+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
-        print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
+        if decryption[1][a[i]+ite[i]][0]==-1:
+            truck_time[i]=truck_time[i]+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
+            print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
+        else:
+            truck_time[i]=truck_time[i]+max_outarray_release_date(decryption[1][a[i]+ite[i]])+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
+            print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
 for i in range(0,len(truck_time)):
     if decryption[1][a[i]+ite[i]+1][0]==-1:
         package_queue[i][ite[i]][0]=truck_time[i]-(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_drone
@@ -250,3 +252,4 @@ for i in range(0,number_truck):
     print("Truck %i :"%i,last_point_package_queue[i],"to 0")
 Time=max(truck_time)
 print("Time is: ",Time)
+
