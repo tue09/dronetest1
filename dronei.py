@@ -225,7 +225,6 @@ for z in range(0,number_customer+1):
             element_put_in_drone_queue=[0]*len(p)
             for i in range(0,len(p)):
                 timedr=drone_queue.get()
-                r=i%3
                 drone_queue.put(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
                 element_put_in_drone_queue[i]=(max(timedr,package_queue[h][ite[h]-1][0])+2*distance(customer[decryption[0][a[h]+ite[h]]].coordinates,customer[decryption[0][a[h]+ite[h]-1]].coordinates))
 
