@@ -196,7 +196,7 @@ for i in range(0,len(truck_time)):
             truck_time[i]=truck_time[i]+max_outarray_release_date(decryption[1][a[i]+ite[i]])+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
             print("Truck %i : 0"%i,"to %i"%truck_path_array[a[i]+ite[i]])
 for i in range(0,len(truck_time)):
-    if package_queue[i][ite[i]][1]==999:package_queue[i][ite[i]][0]=0
+    if package_queue[i][ite[i]][1]==999:package_queue[i][ite[i]][0]=999999
     else:
         if decryption[1][a[i]+ite[i]+1][0]==-1:
             package_queue[i][ite[i]][0]=truck_time[i]-(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_drone
