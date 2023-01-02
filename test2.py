@@ -209,7 +209,7 @@ for c in range(0,100000):
             if decryption[1][a[i]+ite[i]][0]==-1:
                 truck_time[i]=truck_time[i]+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
             else:
-                truck_time[i]=truck_time[i]+max_outarray_release_date(decryption[1][a[i]+ite[i]])+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
+                truck_time[i]=max(truck_time[i],max_outarray_release_date(decryption[1][a[i]+ite[i]]))+(distance(depot,customer[package_queue[i][ite[i]][1]].coordinates))/speed_truck
     for i in range(0,len(truck_time)):
         if package_queue[i][ite[i]][1]==999:package_queue[i][ite[i]][0]=999999
         else:
