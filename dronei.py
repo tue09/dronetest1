@@ -164,7 +164,7 @@ def sorted_package_by_weight(array,capicity):
             x.pop(i)
     return x
 decryption=change_array(truck_path_array,x,number_customer,number_truck)
-# a is an array satisfying truck_path_array[a[i]]=0 for all i in range(0,len(a))
+# a is an array satisfying decryption[0][a[i]]=0 for all i in range(0,len(a))
 a=[]
 for i in range(0,len(truck_path_array)+1):
     if decryption[0,i]==0:
