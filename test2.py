@@ -181,7 +181,7 @@ for c in range(0,100000):
                 x.pop(i)
         return x
     decryption=change_array(truck_path_array,x,20,3)
-    # a is an array satisfying decryption[a[i]]=0 for all i in range(0,len(a))
+    # a is an array satisfying decryption[0][a[i]]=0 for all i in range(0,len(a))
     a=[]
     for i in range(0,len(truck_path_array)+1):
         if decryption[0,i]==0:
