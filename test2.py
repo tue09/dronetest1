@@ -289,9 +289,9 @@ for c in range(0,10000):
 
     #
     #trucks back to depot
-    last_point_package_queue=[]
+    last_point_package_queue=[0]*(len(a)-1)
     for i in range(0,len(a)-1):
-        last_point_package_queue.append(truck_path_array[a[i+1]-2])
+        last_point_package_queue[i]=decryption[0][a[i+1]-1]
     last_point_package_queue.append(truck_path_array[len(truck_path_array)-1])
     for i in range(0,number_truck):
         truck_time[i]=truck_time[i]+distance(customer[last_point_package_queue[i]].coordinates,depot)/speed_truck
