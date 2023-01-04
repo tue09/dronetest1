@@ -16,7 +16,7 @@ coordinates=[0]*(number_customer+1)
 for i in range(0,len(coordinates)):
     coordinates[i]=[]
 time_release=[0]*(number_customer+1)
-for i in range(0,21):
+for i in range(0,number_customer+1):
     coordinates[i].append(int(data[i+5][0:2]))
     coordinates[i].append(int(data[i+5][3:5]))
     time_release[i]=int(data[i+5][18:len(data[i+5])-1])
