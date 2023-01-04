@@ -30,7 +30,7 @@ customer=[0]*(number_customer+1)
 customer[0]=cus(coordinates[0],0,0)
 for i in range(1,len(customer)):
     customer[i]=cus(coordinates[i],time_release[i],1)
-truck_path_array=[0,3,5,7,8,1,2,4,10,11,13,15,0,9,18,20,19,6,12,17,16,14]
+truck_path_array=[1,3,5,7,8,0,2,4,10,11,13,15,0,9,18,20,19,6,12,17,16,14]
 x=[0.4,0.5,0.8,0.75,0.15,0.9,0.3,0.25,0.65,0.7,0.13,0.45,0.1,0.2,0.5,0.11,0.25,0.36,0.19,0.78,0.89,0.9]
 #
 #Function
@@ -276,9 +276,9 @@ for z in range(0,2*(number_customer+1)):
 
 #
 #trucks back to depot
-last_point_package_queue=[]
+last_point_package_queue=[0]*(len(a)-1)
 for i in range(0,len(a)-1):
-    last_point_package_queue.append(truck_path_array[a[i+1]-2])
+    last_point_package_queue[i]=decryption[0][a[i+1]-1]
 last_point_package_queue.append(truck_path_array[len(truck_path_array)-1])
 for i in range(0,number_truck):
     truck_time[i]=truck_time[i]+distance(customer[last_point_package_queue[i]].coordinates,depot)/speed_truck
