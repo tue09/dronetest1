@@ -219,7 +219,7 @@ for i in range(0,len(truck_time)):
                     p[i].pop(0)
 #
 # trucks and drones move
-for z in range(0,16):
+for z in range(0,2*(number_customer+1)):
     variable=0
     compare=[]
     v=drone_queue.get()
