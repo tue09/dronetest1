@@ -272,7 +272,7 @@ for c in range(0,10000):
                 else:
                     truck_time[h]=element_put_in_drone_queue-(distance(customer[decryption[0][a[h]+ite[h]-1]].coordinates,customer[decryption[0][a[h]+ite[h]]].coordinates)/speed_drone)+(distance(customer[package_queue[h][ite[h]-1][1]].coordinates,customer[package_queue[h][ite[h]][1]].coordinates))/speed_truck
                     pu=[]
-                    u=sorted_release_date(decryption[1][a[h]+ite[h]])
+                    u=sorted_release_date(decryption[1][a[h]+ite[h]+1])
                     s=sorted_package_by_weight(u,capicity_drone)
                     for j in range(0,len(s)):
                         pu.append(customer[s[j][len(s[j])-1]].release_date)
