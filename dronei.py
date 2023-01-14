@@ -4,12 +4,18 @@ import numpy as np
 import math
 #
 #Data
+#Max_Drone_Flight_Time = 60 minutes = 1 hours.
+#Drone_Unloading_Time = 5 minutes = 5/60 hours.
+#Drone_Take_Off_Time = 5 minutes = 5/60 hours.
 number_customer=20
 number_truck=3
 number_drone=3
 speed_truck=30
 speed_drone=45
-capicity_drone=1
+capicity_drone=2
+Max_Drone_Flight_Time=1
+Drone_Unloading_Time=5/60
+Drone_Take_Off_Time=5/60
 file_object=open('C101_0.5.dat')
 data=file_object.readlines()
 coordinates=[0]*(number_customer+1)
@@ -239,6 +245,7 @@ for z in range(0,2*(number_customer+1)):
         if compare[i]==999999:
             m+=1
     if m==len(package_queue):
+        package_queue[h][ite[h]][0].append(999999)
         break
     if package_queue[h][ite[h]+1][1]!=999:
         element_put_in_drone_queue=0
@@ -286,4 +293,3 @@ for i in range(0,number_truck):
     print("Truck %i :"%i,last_point_package_queue[i],"to 0")
 Time=max(truck_time)
 print("Time is: ",Time)
-
