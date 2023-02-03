@@ -36,8 +36,8 @@ customer=[0]*(number_customer+1)
 customer[0]=cus(coordinates[0],0,0)
 for i in range(1,len(customer)):
     customer[i]=cus(coordinates[i],time_release[i],1)
-truck_path_array=[1,11,5,7,14,0,2,4,10,3,13,15,0,9,18,20,19,6,12,17,16,8]
-x=[0.4,0.45,0.5,0.8,0.1,0.75,0.6,0.65,0.5,0.4,0.1,0.05,0.8,0.6,0.2,0.1,0.05,0.7,0.03,0.01,0.015,0.7]
+truck_path_array=[1,11,20,5,7,14,0,2,4,6,16,10,3,13,15,0,9,18,19,12,17,8]
+x=[0.4,0.45,0.2,0.6,0.9,0.1,0.4,0.6,0.85,0.9,0.15,0.65,0.25,0.05,0.075,0.8,0.8,0.3,0.22,0.1,0.1,0.4]
 #
 #Function
 def distance(a,b):
@@ -206,7 +206,6 @@ a=[]
 for i in range(0,len(truck_path_array)+1):
     if decryption[0,i]==0:
         a.append(i)
-
 last_point_package_queue=[0]*(len(a)-1)
 for i in range(0,len(a)-1):
     last_point_package_queue[i]=decryption[0][a[i+1]-1]
@@ -340,10 +339,8 @@ def Function(s):
     Time=max(truck_time)
     Solution=[Drone_journey,Time]
     return Solution
-
 Current_Solution=Function(lists)
 print(Current_Solution[0])
-print("Time is:",Current_Solution[1])
 drone_journey=[]
 for i in range(0,len(Current_Solution[0])):
     drone_journey.append(Current_Solution[0][i][len(Current_Solution[0][i])-1])
@@ -360,8 +357,6 @@ print(package_queue)
 decryption_fake=copy.deepcopy(decryption)
 for i in range(0,len(decryption_fake[1])):
     decryption_fake[1][i]=sorted_release_date(decryption_fake[1][i])
-
-
 drone_time=[0]*number_drone
 truck_time=[0]*number_truck
 time_truck_append=[9999999]*(number_customer+1)
@@ -379,11 +374,19 @@ def point_journey(journey):
                 point.pop(j)
                 break
     return point
+def drone_flight_time(journey):
+    time=0
+    time=time+distance(depot,customer[delivery_location(point_journey(journey)[0][0])].coordinates)/speed_drone
+    if len(point_journey(journey))!=1:
+        for i in range(0,len(point_journey(journey))-1):
+            time=time+distance(customer[delivery_location(point_journey(journey)[i][0])].coordinates,customer[delivery_location(point_journey(journey)[i+1][0])].coordinates)/speed_drone
+    time=time+distance(customer[delivery_location(point_journey(journey)[len(point_journey(journey))-1][0])].coordinates,depot)/speed_drone
+    return time
 def drone_move(a,journey):
 #drone a at x in journey to next point
 # x in range(0,len(point_journey(journey))+1): x=0:depot
     if drone_location[a]==0:
-        drone_time[a]=max(max(drone_time[a],max_outarray_release_date(journey))+Drone_Unloading_Time+distance(depot,customer[point_journey(journey)[drone_location[a]][0]].coordinates)/speed_drone,time_truck_append[delivery_location(point_journey(journey)[0][0])])
+        drone_time[a]=max(max(drone_time[a],max_outarray_release_date(journey))+Drone_Unloading_Time+distance(depot,customer[delivery_location(point_journey(journey)[drone_location[a]][0])].coordinates)/speed_drone,time_truck_append[delivery_location(point_journey(journey)[0][0])])
         print("Drone",a,"move from: 0 to",delivery_location(point_journey(journey)[drone_location[a]][0]),"bring package",journey,"delivery",point_journey(journey)[drone_location[a]]," || Drone",a,"time is:",drone_time[a])
         drone_location[a]+=1
     elif drone_location[a]!=0:
@@ -418,8 +421,6 @@ def truck_move(s,x):
                 time_truck_append[decryption[0][a[s]+x+1]]=truck_time[s]
                 truck_location[s]+=1
                 print("Truck",s,"move from:",decryption[0][a[s]+x],"to",decryption[0][a[s]+x+1],"|| Truck",s,"time is:",truck_time[s])
-drone_journey=[[11,2,4],[9,5],[3,10],[6],[7],[8]]
-print("drone_journey is:",drone_journey)
 def reset():
     global drone_time
     global truck_time
@@ -433,12 +434,37 @@ def reset():
     truck_location=[0]*number_truck
     drone_location=[0]*number_drone
     drone_complete_at=[0]*(number_customer+1)
-def fitness(drone_journey1):
-    print(drone_journey1)
+def sorted_journey_release_date(journey):
+    package_queue1=[0]*number_truck
+    for i in range(0,number_truck):
+        package_queue1[i]=[]
+    for i in range(0,len(journey)):
+        temp=which_truck_package_in(delivery_location(journey[i][0]))
+        package_queue1[temp].append(journey[i])
+    check=[0]*len(package_queue1)
+    sort=[]
+    for j in range(0,len(journey)):
+        for i in range(0,len(package_queue1)):
+            if package_queue1[i]==[]:
+                check[i]=999999
+            else:
+                check[i]=max_outarray_release_date(package_queue1[i][0])
+        for i in range(0,len(package_queue1)):
+            if check[i]==min(check):
+                h=i
+                break
+        sort.append(package_queue1[h][0])
+        package_queue1[h].pop(0)
+    return sort
+drone_journey=sorted_journey_release_date(drone_journey)
+def fitness(drone_journey):
+    reset()
+    drone_journey=sorted_journey_release_date(drone_journey)
+    drone_journey1=copy.deepcopy(drone_journey)
+    print("drone_journey is:",drone_journey1)
     decryption_fake=copy.deepcopy(decryption)
     for i in range(0,len(decryption_fake[1])):
         decryption_fake[1][i]=sorted_release_date(decryption_fake[1][i])
-    drone_journey=copy.deepcopy(drone_journey1)
     #Trucks move from depot
     for i in range(0,number_truck):
         truck_move(i,0)
@@ -464,8 +490,8 @@ def fitness(drone_journey1):
             if drone_time[i]==min(temp):
                 h=i
                 break
-        loading[h]=drone_journey[0]
-        drone_journey.pop(0)
+        loading[h]=drone_journey1[0]
+        drone_journey1.pop(0)
         drone_move(h,loading[h])
         for i in range(0,len(point_journey(loading[h])[drone_location[h]-1])):
             for j in range(0,len(decryption_fake[1])):
@@ -477,10 +503,10 @@ def fitness(drone_journey1):
                                 drone_complete_at[decryption_fake[0][j]]=drone_time[h]
                             break
         if drone_location[h]!=0:
-            if drone_location[h]==len(loading[h]):
+            if drone_location[h]==len(point_journey(loading[h])):
                 drone_move(h,loading[h])
             else:
-                while time_truck_append[delivery_location(loading[h][drone_location[h]])]!=9999999:
+                while time_truck_append[delivery_location(point_journey(loading[h])[drone_location[h]][0])]<9999999:
                     drone_move(h,loading[h])
                     for i in range(0,len(point_journey(loading[h])[drone_location[h]-1])):
                         for j in range(0,len(decryption_fake[1])):
@@ -491,7 +517,7 @@ def fitness(drone_journey1):
                                         if decryption_fake[1][j]==[]:
                                             drone_complete_at[decryption_fake[0][j]]=drone_time[h]
                                         break
-                    if drone_location[h]==len(loading[h]):break
+                    if drone_location[h]==len(point_journey(loading[h])):break
                     if drone_location[h]==0:
                         break
         for l in range(0,capacity_drone):
@@ -503,10 +529,10 @@ def fitness(drone_journey1):
                     truck_move(i,truck_location[i])
             for u in range(0,number_drone):
                 if drone_location[u]!=0:
-                    if drone_location[u]==len(loading[u]):
+                    if drone_location[u]==len(point_journey(loading[u])):
                         drone_move(u,loading[u])
                     else:
-                        while time_truck_append[delivery_location(loading[u][drone_location[u]])]!=9999999:
+                        while time_truck_append[delivery_location(point_journey(loading[u])[drone_location[u]][0])]<9999999:
                             drone_move(u,loading[u])
                             for i in range(0,len(point_journey(loading[u])[drone_location[u]-1])):
                                 for j in range(0,len(decryption_fake[1])):
@@ -517,46 +543,115 @@ def fitness(drone_journey1):
                                                 break
                                             if decryption_fake[1][j]==[]:
                                                 drone_complete_at[decryption_fake[0][j]]=drone_time[u]
-                            if drone_location[u]==len(loading[u]):break
+                            if drone_location[u]==len(point_journey(loading[u])):break
                             if drone_location[u]==0:
                                 break
-                            if drone_location[u]==len(loading[u]):
+                            if drone_location[u]==len(point_journey(loading[u])):
                                 drone_move(u,loading[u])
                                 break
                     if drone_location[u]==0:
                         loading[u]=[]
-        print("drone_journey is:",drone_journey)
+        print("drone journey is:",drone_journey1)
     time=max(truck_time)
-    reset()
     print("_______________________________________________________")
     return time
-print("Time is:",fitness(drone_journey))
 current_solution=fitness(drone_journey)
-
-
-def split(drone_journey,index):
+print("Time is:",current_solution)
+test_split=0
+test_check=0
+number_test_split=0
+number_test_check=0
+def split(index):
+    global drone_journey
+    global current_solution
+    global test_split
+    test_split=0
     if len(drone_journey[index])!=1:
-        global current_solution
-        temp=[0]*(len(drone_journey[index])-1)
+        temp=[0]*(2*(len(drone_journey[index])-1))
         for i in range(0,len(temp)):
             temp[i]=copy.deepcopy(drone_journey)
+        for i in range(0,len(drone_journey[index])-1):
             fake=split_element_into_2_parts(temp[i][index],i+1)
             temp[i].pop(index)
             temp[i].insert(index,fake[1])
             temp[i].insert(index,fake[0])
-        check=[0]*(len(drone_journey[index])-1)
-        for i in range(0,(len(drone_journey[index])-1)):
-            check[i]=fitness(temp[i])
-        yy=max(check)
+        for i in range(len(drone_journey[index])-1,2*(len(drone_journey[index])-1)):
+            temp[i]=copy.deepcopy(temp[i-len(drone_journey[index])+1])
+            temp[i][index+1].append(temp[i][index+2][0])
+            temp[i][index+2].pop(0)
+            if temp[i][index+2]==[]:
+                temp[i].pop(index+2)
+        check=[0]*len(temp)
         for i in range(0,len(temp)):
+            temp[i]=sorted_journey_release_date(temp[i])
+            check[i]=fitness(temp[i])
+        yy=min(check)
+        for i in range(0,len(temp)):
+            temp[i]=sorted_journey_release_date(temp[i])
+            if fitness(temp[i])==yy:
+                h=i
+                break
+        print("current_solution is:",current_solution)
+        if yy<current_solution:
+            drone_journey=copy.deepcopy(temp[h])
+            current_solution=yy
+            test_split+=1
+def change(index):
+    global drone_journey
+    global current_solution
+    global test_check
+    test_check=0
+    k=0
+    index=2
+    temp=[]
+    fake=copy.deepcopy(drone_journey)
+    weight=sum_outarray_weight(drone_journey[index+1])
+    while weight<=capacity_drone:
+        if weight+customer[fake[index][len(fake[index])-1]].weight>capacity_drone:
+            break
+        else:
+            fake[index+1].insert(0,fake[index][len(fake[index])-1])
+            if drone_flight_time(fake[index+1])>1:
+                break
+            weight=weight+customer[fake[index][len(fake[index])-1]].weight
+            fake[index].pop(len(fake[index])-1)
+            if fake[index]==[]:
+                fake.remove([])
+                k+=1
+            fake_cp=copy.deepcopy(fake)
+            temp.append(fake_cp)
+            if k==1:
+                break
+    if len(temp)!=0:
+        check=[0]*len(temp)
+        for i in range(0,len(temp)):
+            temp[i]=sorted_journey_release_date(temp[i])
+            check[i]=fitness(temp[i])
+        yy=min(check)
+        print("yy is:",yy)
+        for i in range(0,len(temp)):
+            temp[i]=sorted_journey_release_date(temp[i])
             if fitness(temp[i])==yy:
                 h=i
                 break
         if yy<current_solution:
-            drone_journey=temp[h]
+            drone_journey=copy.deepcopy(temp[h])
             current_solution=yy
+            test_check+=1
+while number_test_split<=len(drone_journey)-2 or number_test_check<=len(drone_journey)-2:
+    number_test_split=0
+    number_test_check=0
+    for i in range(0,len(drone_journey)-1):
+        split(i)
+        if test_split==0:number_test_split+=1
+        elif test_split==1:break
+        change(i)
+        if test_check==0:number_test_check+=1
+        elif test_check==1:break
+print("Drone journey is:",drone_journey)
+print("Time is",current_solution)
 
-split(drone_journey,5)
-print("Time is:",fitness(drone_journey))
+
+
 
 
