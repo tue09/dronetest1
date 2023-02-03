@@ -367,12 +367,18 @@ def point_journey(journey):
     point=[0]*len(journey1)
     for i in range(0,len(journey1)):
         point[i]=[journey1[i]]
-    for i in range(0,len(journey1)):
-        for j in range(i+1,len(journey1)):
-            if delivery_location(journey1[j])==delivery_location(journey1[i]):
-                point[i].append(journey1[j])
-                point.pop(j)
-                break
+    for z in range(0,capacity_drone):
+        k=0
+        for i in range(0,len(point)-1):
+            for j in range(i+1,len(point)):
+                if delivery_location(point[j][0])==delivery_location(point[i][0]):
+                    point[i].append(point[j][0])
+                    point[j].pop(0)
+                    if point[j]==[]:
+                        point.pop(j)
+                    k+=1
+                    break
+            if k==1:break
     return point
 def drone_flight_time(journey):
     time=0
