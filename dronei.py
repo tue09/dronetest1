@@ -648,6 +648,7 @@ while number_test_split<=len(drone_journey)-2 or number_test_check<=len(drone_jo
         change(i)
         if test_check==0:number_test_check+=1
         elif test_check==1:break
+fitness(drone_journey)
 print("Drone journey is:",drone_journey)
 print("Time is",current_solution)
 
